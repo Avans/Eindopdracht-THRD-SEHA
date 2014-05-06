@@ -1,374 +1,1 @@
-<!doctype html>
-<html>
-<head>
-<title>Threading / Security &amp; Hacking - Eindopdracht</title>
-<meta charset="utf-8">
-<meta name="author" content="Frans Spijkerman, Wim Verhoef">
-<meta name="description" content="Threading / Security &amp; Hacking T - Eindopdracht">
-<meta name="rating" content="General">
-<meta name="robots" content="noindex,nofollow">
-<style>
-.colorbar {
-	color: white;
-	background-color: #247;	
-}
-body {
-	background-color: #DDF;	
-}
-#container {
-	background-color: #EEF;	
-}
-code {
-	color: blue;
-}
-h1, h2, h3, h3 {
-    color: #991111
-}
-h2 {
-    border-bottom: 2px solid #991111;
-}
-h3 {
-    border-bottom: 1px solid #991111;
-}
-
-/* THEN THE REST */
-
-html {
-	height: 100%;
-}
-body {
-	padding: 2px;
-	margin: 0px;
-	border: 0px;
-	height: 100%;
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 14px;
-}
-#container {
-	position: relative;
-	min-width: 450px;
-	max-width: 760px;
-	margin-left: auto;
-	margin-right: auto;
-	min-height: 100%;
-    padding: 4px;
-}
-h1 {
-	font-size: 21px
-}
-h2 {
-	font-size: 19px;
-}
-h3{
-	font-size: 17px;
-	margin-bottom: 0px;
-}
-h3 {
-	font-size: 15px;
-	margin-bottom: 0px;
-}
-.colorbar {
-	width: 100%;
-	font-size: 13px;
-    font-weight: bold;
-    min-height: 34px;
-}
-td.L {
-	width: 33%;
-	text-align: left;
-    padding-left: 3px;
-}
-td.M {
-	width: 33%;
-	text-align: center;
-}
-td.R {
-	width: 33%;
-	text-align: right;
-    padding-right: 3px;
-}
-code {
-	margin-left: 3px;
-	margin-right: 3px;
-	font-size: larger;
-	white-space: nowrap;
-}
-li {
-	margin-top: 4px;
-}
-.copyright {
-	font-family: Arial;
-	font-size: 9px;
-	color: gray;
-}
-.alert {
-    position: fixed;
-    font-size: 20px;
-    display: inline-block;
-    border: 2px solid red;
-    background-color: #FF8;
-    padding: 3px;
-    font-weight: bold;
-}
-.remark {
-    border: 2px solid red;
-    padding: 3px;
-}
-form {
-    float: right;
-    margin-left: 8px;
-    border: 3px outset lightblue;
-    background-color: #FFFFDD;
-    display: inline-block;
-}
-form table {
-    border-collapse: collapse;
-}
-form thead tr {
-    background-color: lightgray;
-}
-form thead th {
-    padding: 3px;
-    text-align: left;
-}
-input {
-    padding-left: 2px;
-}
-.right {
-    text-align: right;
-}
-.float {
-    display: inline-block;
-}
-</style>
-</head>
-
-<body>
-<div id="container">
-<table class="colorbar"><tr>
-	<td class="L">Threading / Security &amp; Hacking</td>
-	<td class="R">Eindopdracht</td>
-</tr></table>
-
-<h1>Threading / Security &amp; Hacking - Eindopdracht 2013</h1>
-<hr>
-<p class="remark">De eindopdracht voor de vakken Threading en Security & Hacking is een 
-miniproject waarvoor jullie in de tweede helft van dit blok aan gaan werken. 
-<b>Deze opdracht moet in teams van twee worden uitgevoerd.</b> 
-Aan het eind van het blok (week 8 of 9) zullen er assessments zijn, waarin jullie het 
-gebouwde product gaan presenteren en uitleggen. De docenten zullen dan ter beoordeling vragen stellen, 
-en de code bekijken en testen. Er wordt ook een testrapport van jullie verwacht (zie eisen verderop).</p>
-
-
-<p><i>Lees deze opdracht helemaal en zorgvuldig. Als je denkt dat je klaar bent, check de opdracht dan nog een keer.</i></p>
-
-<h2>Onderwerpen</h2>
-
-<p>De onderwerpen die in deze opdracht aan bod komen:</p>
-<ul>
-	<li>Threading
-	<li>Gebruik van sockets
-	<li>Lezen van bestanden en mappen
-	<li>Gebruik van gedeeld geheugen
-	<li>Het producer-consumer-probleem
-	<li>Het HTTP-protocol
-	<li>En bij dit alles: Security &amp; Hacking (OWASP)
-</ul>
-</p>
-
-<h2>Opdracht: Bouw een webserver in Java, C# of C++</h2>
-
-<img style="float:left;width:250px;" src="img/threads.png" alt="threads" title="threads">
-<div class="float">De webserver moet bestaan uit drie hoofd-threads:
-<ol>
-	<li>Een webserver
-	<li>Een controlserver
-	<li>Een logger
-</ol>
-</div>
-
-<br style="clear:both">
-<h3>Webserver</h3>
-<div class="float">
-    Het doel van de webserver is om webpagina's naar een browser sturen. 
-    De bedoeling is dat je in je eigen 'webroot' een aantal html-pagina's met 
-    plaatjes zet, die door de server getoond moeten worden.
-    De webserver moet multithreaded zijn: elk http-request van een browser 
-    moet in een nieuwe handler-thread worden afgehandeld. Je hoeft alleen GET en POST 
-    te implementeren. Andere verzoeken zoals PUT en HEAD kun je afdoen als
-    "400". Werk netjes volgens HTTP-protocol (1.0 of 1.1), zoals:
-</div>
-<img style="float:right;width:280px;" src="img/http.png" alt="http" title="http">
-<ul>
-	<li>Lees alle regels uit het request
-	<li>Stuur altijd een correcte response-header, met onder andere:
-    <ul>
-        <li>De juiste melding (200, 403, 404, ...)
-        <li>Het correcte content-type
-        <li>De content-length
-    </ul>
-</ul>
-<p>
-	Bovendien:
-</p>
-<ul>
-	<li>De pagina's met foutmeldingen (zoals 404) staan in een aparte map.
-	<li>De webserver moet alle verzoeken loggen, met daarin:
-    <ul>
-        <li>Het ip-adres van de aanvrager
-        <li>De datum en tijd (yyyy-mm-dd HH:MM:SS) en tijdsduur (in msec) van het verzoek
-        <li>De hele URL uit het request
-    </ul>
-</ul>
-
-<h3>Controlserver</h3>
-<p>
-	De controlserver draait op dezelfde machine, maar op een andere poort dan de webserver. De controlserver
-	is een bijzonder soort webserver om de instellingen van je programma te kunnen wijzigen.
-</p>
-
-<form action="">
-<table>
-<thead>
-    <tr><th>SuperServer</th><th class="right">Control Panel</th></tr>
-</thead>
-<tbody>
-    <tr><td>Web port:</td><td><input type="text" value="8080"</td></tr>
-    <tr><td>Control port:</td><td><input type="text" value="8081"</td></tr>
-    <tr><td>Webroot:</td><td><input type="text" value="c:/webserver/webroot"></td></tr>
-    <tr><td>Default page:</td><td><input type="text" value="index.html;index.htm"></td></tr>
-    <tr><td>Directory browsing</td><td><input type="checkbox"></td></tr>
-    <tr><td><input type="button" value="Show Log"></td>
-        <td class="right"><input type="button" value="OK"></td>
-    </tr>
-</tbody>
-</table>
-</form>
-
-<ul>
-	<li>De control-server werkt met een web-interface (formulier).
-	<li>In de control-server kun je de volgende instellingen <b>zien</b> en <b>wijzigen</b>:
-	<ul>
-		<li>listen-poorten van beide servers (meteen wijzigen als na OK)
-		<li>de webroot van de webserver
-		<li>de naam van de default-pagina (zoals index.html)
-		<li>directory browsing in- en uitschakelen
-	</ul>
-	<li>De instellingen worden in een XML-bestand opgeslagen.
-	<li>Het logbestand moet via een webinterface in de controlserver te bekijken zijn.
-</ul>
-
-<h3>Beveiliging</h3>
-<img style="float:right;width:160px;margin-left:12px;" src="img/login.png" alt="login" title="login">
-
-<h3>Inloggen</h3>
-<p>
-    Om in de controlserver te komen, moeten beheerders en helpdesk-medewerkers kunnen inloggen. Je moet daarvoor 
-    een authorisatiesysteem bouwen met de volgende eisen:</p>
-    <ul>
-        <li>Het systeem werkt met POST over HTTPS
-        <li>Er zijn twee security levels:
-        <ol>
-            <li><em>ondersteuners</em> mogen instellingen zien en log files bekijken
-            <li><em>beheerders</em> mogen instellingen wijzigen, log files bekijken en gebruikersgegevens onderhouden
-        </ol>
-        <li>Gebruikersgegevens staan in een SQL-database (zoals MySQL)
-        <li>Wachtwoorden worden gecodeerd opgeslagen
-	</ul>
-    
-<h3>Overige beveiligingseisen</h3>
-<img style="float:left;width:100px;margin-top:10px;margin-right:40px;" src="img/owasp.png" alt="owasp" title="owasp">
-<ul>
-    <li>Gebruikers mogen gegevens buiten de webroot niet kunnen benaderen
-    <li>De bedreigingen zoals genomd in de <a target="_blank" href="https://www.owasp.org/index.php/Top_10_2010-Main">OWASP Top 10 (2010)</a> worden ondervangen
-</ul>
-
-<br style="clear:both">
-
-<h3>Testen</h3>
-<p>Bedenk testscenario's om alle risico's te testen. Beschrijf voor elke bedreiging uit die OWASP Top 10
-<ul>
-    <li>wat het gevaar zou kunnen zijn in je server
-    <li>wat je daartegen gedaan hebt
-    <li>hoe je dat getest hebt
-</ul>
-<p>Maak hiervan een keurig rapport en breng dat mee naar de eindbeoordeling.</p>
-</p>
-
-<h3>Logger</h3>
-<p>
-	Niet omdat het de beste oplossing is, maar om ervaring met synchronisatie op te doen, 
-	loggen we via een zelfgemaakte cyclische message-queue (fifo). Deze <i>moet</i> je implementeren als een 
-	string-array met vaste lengte.
-</p>
-<p>
-<img style="float:left;width:330px;margin-right:12px;" src="img/producer-consumer.gif" alt="producer-consumer" title="producer-consumer">
-	Hier ga je dus een producer-consumer probleem oplossen.
-	Er is één consument: de logger-thread. 
-	Er zijn meerdere producenten: de web- en controlserver en hun handler-threads. 
-	Een thread kan een boodschap in de queue zetten via een methode van de logger. 
-	Deze methode moet de aanroeper laten wachten als de queue vol is of als er een andere 
-	thread met de queue bezig is.
-</p>
-<p>
-	De logger-thread wordt aan het begin gestart en blijft 
-	aanwezig (wordt dus niet voor elke boodschap gestart). Hij wacht tot er iets te 
-	loggen  valt. De logger mag alleen maar boodschappen uit de queue 
-	halen en in het logbestand schrijven als er minstens één boodschap in staat 
-	en als de queue niet door een andere thread in gebruik is.
-</p>
-<p>
-	Met andere woorden: de wachtrij is een stuk gedeeld geheugen voor alle 
-	threads, dat door synchronisatie beschermd moet worden.
-</p>
-
-<h3>Programmeren</h3>
-<ul>
-<li>De hele applicatie kan een console-appplicatie zijn (of een server/deamon).
-<li>De GUI van de controlserver gaat via een browser. Gebruik daarvor html-forms.
-<li>Schrijf zelf code om over sockets te communiceren, dus geen HTTPListener of andere kant-en-klare oplossingen.
-<li>Gebruik duidelijke code, voorzien van zinvol commentaar
-<li>Maak een logische indeling in klassen
-<li>Gebruik geen harde bestandspaden in je code, zoals "C:/Webroot"
-<li>Gebruik geen harde getallen in je code, maar constanten
-<li>Gebruik nergens polling (busy waiting), ook niet met Sleep() in een loop
-<li>Breek threads niet af met close, kill, interrupt of varianten om threads te stoppen
-<li>Wees zuinig met geheugen: lees bestanden niet in één keer in het geheugen, maar in stukken
-</ul>
-
-<pre style="border:1px solid blue;display:inline-block">
- // onzin-commentaar:
- i++; // verhoog de waarde van de variabele i met één 
-</pre>
-
-
-<h3>Algemeen</h3>
-<img style="float:left;width:110px;margin-right:42px;" src="img/team.png"  alt="team" title="team">
-<ul>
-<li>Werk in een team van twee
-<li>Zorg dat <i>elk van beide teamleden</i> alle code kent en <i>kan uitleggen</i>
-<li>Test je server in verschillende browsers
-</ul>
-
-<br style="clear:both;">
-
-<img style="float:right;width:130px;margin-left:12px;" src="img/assessment.png" alt="assessment" title="assessment">
-<h2>Beoordeling</h2>
-<p>Als je aan alle eisen voldoet, kun je in principe een 8.0 scoren. Met heel mooie oplossingen 
-en extra functionaliteit kun je hoger scoren. Jullie worden nog uitgenodigd om in 
-week 8 of 9 je server te demonstreren en uit te leggen.</p>
-
-<p><b>Succes!</b></p>
-	
-<p class="copyright">SPIJ20130528</p>
-
-<table class="colorbar">
-<tr>
-	<td class="L">Avans Hogeschool 's&#8209Hertogenbosch</td>
-	<td class="M">Academie voor Industrie&nbsp;&amp;&nbsp;Informatica</td>
-	<td class="R">Opleiding BICT</td>
-</tr>
-</table>
-</div>
-</body>
-</html>
+<!doctype html><html><head><title>Threading / Security &amp; Hacking - Eindopdracht</title><meta charset="utf-8"><meta name="author" content="Frans Spijkerman, Wim Verhoef"><meta name="description" content="Threading / Security &amp; Hacking T - Eindopdracht"><meta name="rating" content="General"><meta name="robots" content="noindex,nofollow"><style>.colorbar {	color: white;	background-color: #247;}body {	background-color: #DDF;}#container {	background-color: #EEF;}code {	color: blue;}h1, h2, h3, h3 {    color: #991111}h2 {    border-bottom: 2px solid #991111;}h3 {    border-bottom: 1px solid #991111;}/* THEN THE REST */html {	height: 100%;}body {	padding: 2px;	margin: 0px;	border: 0px;	height: 100%;	font-family: Verdana, Arial, sans-serif;	font-size: 14px;}#container {	position: relative;	min-width: 450px;	max-width: 760px;	margin-left: auto;	margin-right: auto;	min-height: 100%;    padding: 4px;}h1 {	font-size: 21px}h2 {	font-size: 19px;}h3{	font-size: 17px;	margin-bottom: 0px;}h3 {	font-size: 15px;	margin-bottom: 0px;}.colorbar {	width: 100%;	font-size: 13px;    font-weight: bold;    min-height: 34px;}td.L {	width: 33%;	text-align: left;    padding-left: 3px;}td.M {	width: 33%;	text-align: center;}td.R {	width: 33%;	text-align: right;    padding-right: 3px;}code {	margin-left: 3px;	margin-right: 3px;	font-size: larger;	white-space: nowrap;}li {	margin-top: 4px;}.copyright {	font-family: Arial;	font-size: 9px;	color: gray;}.alert {    position: fixed;    font-size: 20px;    display: inline-block;    border: 2px solid red;    background-color: #FF8;    padding: 3px;    font-weight: bold;}.remark {    border: 2px solid red;    padding: 3px;}form {    float: right;    margin-left: 8px;    border: 3px outset lightblue;    background-color: #FFFFDD;    display: inline-block;}form table {    border-collapse: collapse;}form thead tr {    background-color: lightgray;}form thead th {    padding: 3px;    text-align: left;}input {    padding-left: 2px;}.right {    text-align: right;}.float {    display: inline-block;}</style></head><body><div id="container"><table class="colorbar"><tr>	<td class="L">Threading / Security &amp; Hacking</td>	<td class="R">Eindopdracht</td></tr></table><h1>Threading / Security &amp; Hacking - Eindopdracht 2013</h1><hr><p class="remark">De eindopdracht voor de vakken Threading en Security & Hacking is eenminiproject waarvoor jullie in de tweede helft van dit blok aan gaan werken.<b>Deze opdracht moet in teams van twee worden uitgevoerd.</b>Aan het eind van het blok (week 8 of 9) zullen er assessments zijn, waarin jullie hetgebouwde product gaan presenteren en uitleggen. De docenten zullen dan ter beoordeling vragen stellen,en de code bekijken en testen. Er wordt ook een testrapport van jullie verwacht (zie eisen verderop).</p><p><i>Lees deze opdracht helemaal en zorgvuldig. Als je denkt dat je klaar bent, check de opdracht dan nog een keer.</i></p><h2>Onderwerpen</h2><p>De onderwerpen die in deze opdracht aan bod komen:</p><ul>	<li>Threading	<li>Gebruik van sockets	<li>Lezen van bestanden en mappen	<li>Gebruik van gedeeld geheugen	<li>Het producer-consumer-probleem	<li>Het HTTP-protocol	<li>En bij dit alles: Security &amp; Hacking (OWASP)</ul></p><h2>Opdracht: Bouw een webserver in Java, C# of C++</h2><img style="float:left;width:250px;" src="img/threads.png" alt="threads" title="threads"><div class="float">De webserver moet bestaan uit drie hoofd-threads:<ol>	<li>Een webserver	<li>Een controlserver	<li>Een logger</ol></div><br style="clear:both"><h3>Webserver</h3><div class="float">    Het doel van de webserver is om webpagina's naar een browser sturen.    De bedoeling is dat je in je eigen 'webroot' een aantal html-pagina's met    plaatjes zet, die door de server getoond moeten worden.    De webserver moet multithreaded zijn: elk http-request van een browser    moet in een nieuwe handler-thread worden afgehandeld. Je hoeft alleen GET en POST    te implementeren. Andere verzoeken zoals PUT en HEAD kun je afdoen als    "400". Werk netjes volgens HTTP-protocol (1.0 of 1.1), zoals:</div><img style="float:right;width:280px;" src="img/http.png" alt="http" title="http"><ul>	<li>Lees alle regels uit het request	<li>Stuur altijd een correcte response-header, met onder andere:    <ul>        <li>De juiste melding (200, 403, 404, ...)        <li>Het correcte content-type        <li>De content-length    </ul></ul><p>	Bovendien:</p><ul>	<li>De pagina's met foutmeldingen (zoals 404) staan in een aparte map.	<li>De webserver moet alle verzoeken loggen, met daarin:    <ul>        <li>Het ip-adres van de aanvrager        <li>De datum en tijd (yyyy-mm-dd HH:MM:SS) en tijdsduur (in msec) van het verzoek        <li>De hele URL uit het request    </ul></ul><h3>Controlserver</h3><p>	De controlserver draait op dezelfde machine, maar op een andere poort dan de webserver. De controlserver	is een bijzonder soort webserver om de instellingen van je programma te kunnen wijzigen.</p><form action=""><table><thead>    <tr><th>SuperServer</th><th class="right">Control Panel</th></tr></thead><tbody>    <tr><td>Web port:</td><td><input type="text" value="8080"</td></tr>    <tr><td>Control port:</td><td><input type="text" value="8081"</td></tr>    <tr><td>Webroot:</td><td><input type="text" value="c:/webserver/webroot"></td></tr>    <tr><td>Default page:</td><td><input type="text" value="index.html;index.htm"></td></tr>    <tr><td>Directory browsing</td><td><input type="checkbox"></td></tr>    <tr><td><input type="button" value="Show Log"></td>        <td class="right"><input type="button" value="OK"></td>    </tr></tbody></table></form><ul>	<li>De control-server werkt met een web-interface (formulier).	<li>In de control-server kun je de volgende instellingen <b>zien</b> en <b>wijzigen</b>:	<ul>		<li>listen-poorten van beide servers (meteen wijzigen als na OK)		<li>de webroot van de webserver		<li>de naam van de default-pagina (zoals index.html)		<li>directory browsing in- en uitschakelen	</ul>	<li>De instellingen worden in een XML-bestand opgeslagen.	<li>Het logbestand moet via een webinterface in de controlserver te bekijken zijn.</ul><h3>Beveiliging</h3><img style="float:right;width:160px;margin-left:12px;" src="img/login.png" alt="login" title="login"><h3>Inloggen</h3><p>    Om in de controlserver te komen, moeten beheerders en helpdesk-medewerkers kunnen inloggen. Je moet daarvoor    een authorisatiesysteem bouwen met de volgende eisen:</p>    <ul>        <li>Het systeem werkt met POST over HTTPS        <li>Er zijn twee security levels:        <ol>            <li><em>ondersteuners</em> mogen instellingen zien en log files bekijken            <li><em>beheerders</em> mogen instellingen wijzigen, log files bekijken en gebruikersgegevens onderhouden        </ol>        <li>Gebruikersgegevens staan in een SQL-database (zoals MySQL)        <li>Wachtwoorden worden gecodeerd opgeslagen	</ul><h3>Overige beveiligingseisen</h3><img style="float:left;width:100px;margin-top:10px;margin-right:40px;" src="img/owasp.png" alt="owasp" title="owasp"><ul>    <li>Gebruikers mogen gegevens buiten de webroot niet kunnen benaderen    <li>De bedreigingen zoals genoemd in de <a target="_blank" href="https://www.owasp.org/index.php/Top_10_2013-Top_10">OWASP Top 10 (2013)</a> worden ondervangen</ul><br style="clear:both"><h3>Testen</h3><p>Bedenk testscenario's om alle risico's te testen. Beschrijf voor elke bedreiging uit die OWASP Top 10<ul>    <li>wat het gevaar zou kunnen zijn in je server    <li>wat je daartegen gedaan hebt    <li>hoe je dat getest hebt</ul><p>Maak hiervan een keurig rapport en breng dat mee naar de eindbeoordeling.</p></p><h3>Logger</h3><p>	Niet omdat het de beste oplossing is, maar om ervaring met synchronisatie op te doen,	loggen we via een zelfgemaakte cyclische message-queue (fifo). Deze <i>moet</i> je implementeren als een	string-array met vaste lengte.</p><p><img style="float:left;width:330px;margin-right:12px;" src="img/producer-consumer.gif" alt="producer-consumer" title="producer-consumer">	Hier ga je dus een producer-consumer probleem oplossen.	Er is één consument: de logger-thread.	Er zijn meerdere producenten: de web- en controlserver en hun handler-threads.	Een thread kan een boodschap in de queue zetten via een methode van de logger.	Deze methode moet de aanroeper laten wachten als de queue vol is of als er een andere	thread met de queue bezig is.</p><p>	De logger-thread wordt aan het begin gestart en blijft	aanwezig (wordt dus niet voor elke boodschap gestart). Hij wacht tot er iets te	loggen  valt. De logger mag alleen maar boodschappen uit de queue	halen en in het logbestand schrijven als er minstens één boodschap in staat	en als de queue niet door een andere thread in gebruik is.</p><p>	Met andere woorden: de wachtrij is een stuk gedeeld geheugen voor alle	threads, dat door synchronisatie beschermd moet worden.</p><h3>Programmeren</h3><ul><li>De hele applicatie kan een console-appplicatie zijn (of een server/deamon).<li>De GUI van de controlserver gaat via een browser. Gebruik daarvor html-forms.<li>Schrijf zelf code om over sockets te communiceren, dus geen HTTPListener of andere kant-en-klare oplossingen.<li>Gebruik duidelijke code, voorzien van zinvol commentaar<li>Maak een logische indeling in klassen<li>Gebruik geen harde bestandspaden in je code, zoals "C:/Webroot"<li>Gebruik geen harde getallen in je code, maar constanten<li>Gebruik nergens polling (busy waiting), ook niet met Sleep() in een loop<li>Breek threads niet af met close, kill, interrupt of varianten om threads te stoppen<li>Wees zuinig met geheugen: lees bestanden niet in één keer in het geheugen, maar in stukken</ul><pre style="border:1px solid blue;display:inline-block"> // onzin-commentaar: i++; // verhoog de waarde van de variabele i met één</pre><h3>Algemeen</h3><img style="float:left;width:110px;margin-right:42px;" src="img/team.png"  alt="team" title="team"><ul><li>Werk in een team van twee<li>Zorg dat <i>elk van beide teamleden</i> alle code kent en <i>kan uitleggen</i><li>Test je server in verschillende browsers</ul><br style="clear:both;"><img style="float:right;width:130px;margin-left:12px;" src="img/assessment.png" alt="assessment" title="assessment"><h2>Beoordeling</h2><p>Als je aan alle eisen voldoet, kun je in principe een 8.0 scoren. Met heel mooie oplossingenen extra functionaliteit kun je hoger scoren. Jullie worden nog uitgenodigd om inweek 8 of 9 je server te demonstreren en uit te leggen.</p><p><b>Succes!</b></p><p class="copyright">SPIJ20130528</p><table class="colorbar"><tr>	<td class="L">Avans Hogeschool 's&#8209Hertogenbosch</td>	<td class="M">Academie voor Industrie&nbsp;&amp;&nbsp;Informatica</td>	<td class="R">Opleiding BICT</td></tr></table></div></body></html>
